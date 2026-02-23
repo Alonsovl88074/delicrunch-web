@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeliCrunch - Rescata, Ahorra y Ayuda | App contra el desperdicio alimentario</title>
+    <meta name="description" content="DeliCrunch es la app mexicana que convierte el desperdicio de alimentos en ahorro. Descubre Deli-Boxes con hasta 65% de descuento mientras cuidas el planeta.">
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange-primary: #E87837;
+            --orange-dark: #D96627;
+            --cream: #FCF9F4;
+            --purple: #9B7DB8;
+            --green: #8BC34A;
+            --black: #1A1A1A;
+            --white: #FFFFFF;
+            --shadow: 4px 4px 0px rgba(0, 0, 0, 1);
+            --shadow-hover: 6px 6px 0px rgba(0, 0, 0, 1);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--cream);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+
+        /* Neobrutalist Components */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            text-decoration: none;
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+        }
+
+        .btn-primary {
+            background-color: var(--orange-primary);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        .card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--white);
+            border-bottom: 4px solid var(--black);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--orange-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--orange-primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: 3px solid var(--black);
+            padding: 0.5rem 1rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border: 5px solid var(--black);
+            box-shadow: 8px 8px 0px var(--purple);
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: var(--orange-primary);
+            color: var(--white);
+            padding: 1rem 1.5rem;
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow);
+            font-weight: 700;
+            transform: rotate(-5deg);
+        }
+
+        .badge-1 {
+            top: -10px;
+            right: -10px;
+        }
+
+        .badge-2 {
+            bottom: 20px;
+            left: -20px;
+            background: var(--green);
+        }
+
+        /* Stats Section */
+        .stats {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+            border-top: 4px solid var(--black);
+            border-bottom: 4px solid var(--black);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: var(--orange-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .features h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--orange-primary);
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background-color: var(--purple);
+            padding: 5rem 2rem;
+            border-top: 4px solid var(--black);
+            border-bottom: 4px solid var(--black);
+        }
+
+        .how-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 3rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .step {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background: var(--orange-primary);
+            color: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 50%;
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 52px;
+            margin-bottom: 1rem;
+        }
+
+        /* Gamification Section */
+        .gamification {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .gamification h2 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .gamification-subtitle {
+            text-align: center;
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            color: var(--purple);
+            font-weight: 600;
+        }
+
+        .game-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .game-card {
+            background: var(--orange-primary);
+            color: var(--white);
+            border: 4px solid var(--black);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .game-card h3 {
+            color: var(--white);
+            margin-bottom: 1rem;
+        }
+
+        /* Events Section */
+        .events {
+            background-color: var(--green);
+            padding: 5rem 2rem;
+            border-top: 4px solid var(--black);
+            border-bottom: 4px solid var(--black);
+        }
+
+        .events-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .events h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .event-card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .event-card h3 {
+            color: var(--orange-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* For Business Section */
+        .for-business {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .business-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .business-image img {
+            width: 100%;
+            border: 5px solid var(--black);
+            box-shadow: var(--shadow);
+        }
+
+        .business-benefits {
+            list-style: none;
+        }
+
+        .business-benefits li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--white);
+            border: 3px solid var(--black);
+            box-shadow: var(--shadow);
+            font-weight: 600;
+        }
+
+        .business-benefits li::before {
+            content: "✓";
+            color: var(--green);
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        /* Impact Section */
+        .impact {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .impact h2 {
+            color: var(--orange-primary);
+            margin-bottom: 2rem;
+        }
+
+        .impact-stats {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .impact-stat {
+            padding: 2rem;
+            background: var(--white);
+            color: var(--black);
+            border: 4px solid var(--orange-primary);
+            box-shadow: 4px 4px 0px var(--orange-primary);
+        }
+
+        .impact-stat h3 {
+            font-size: 2.5rem;
+            color: var(--orange-primary);
+        }
+
+        /* CTA Section */
+        .cta {
+            background-color: var(--orange-primary);
+            padding: 5rem 2rem;
+            text-align: center;
+            border-top: 4px solid var(--black);
+            border-bottom: 4px solid var(--black);
+        }
+
+        .cta h2 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            color: var(--white);
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .app-badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .app-badge {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--black);
+            color: var(--white);
+            border: 4px solid var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer h4 {
+            color: var(--orange-primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer a {
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--orange-primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 2rem 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .business-content {
+                grid-template-columns: 1fr;
+            }
+
+            .impact-stats {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .floating-badge {
+                font-size: 0.875rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(-5deg);
+            }
+            50% {
+                transform: translateY(-10px) rotate(-5deg);
+            }
+        }
+
+        .floating-badge {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#" class="logo">🍞 DELICRUNCH</a>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#como-funciona">Cómo Funciona</a></li>
+                <li><a href="#comercios">Para Comercios</a></li>
+                <li><a href="#impacto">Impacto</a></li>
+                <li><a href="#descargar" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 1rem;">Descargar App</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Menú">☰</button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>RESCATA<br>AHORRA<br>AYUDA</h1>
+            <p class="hero-subtitle">Descubre comida deliciosa con hasta 65% de descuento mientras combates el desperdicio alimentario</p>
+            <div class="hero-buttons">
+                <a href="#descargar" class="btn btn-primary">Descargar Ahora</a>
+                <a href="#como-funciona" class="btn btn-secondary">Ver Cómo Funciona</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/c85f7dce-e90e-4d44-a79a-03564215c40a" alt="DeliCrunch App">
+            <div class="floating-badge badge-1">¡HASTA 65% OFF!</div>
+            <div class="floating-badge badge-2">♻️ ECO-FRIENDLY</div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>65%</h3>
+                <p>Descuento promedio</p>
+            </div>
+            <div class="stat-item">
+                <h3>+200</h3>
+                <p>Comercios aliados</p>
+            </div>
+            <div class="stat-item">
+                <h3>15K</h3>
+                <p>Usuarios activos</p>
+            </div>
+            <div class="stat-item">
+                <h3>50 TON</h3>
+                <p>Comida rescatada</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>¿Por qué DeliCrunch?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📦</div>
+                <h3>Deli-Boxes Sorpresa</h3>
+                <p>Packs con alimentos de calidad a precios increíbles. Nunca sabes qué te tocará, ¡pero siempre es delicioso!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3>Gamificación Total</h3>
+                <p>Gana DeliCoins, sube de nivel y desbloquea badges mientras rescatas comida. ¡Conviértete en un Deli-Héroe!</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Mercado Pago Integrado</h3>
+                <p>Paga fácil y seguro con tarjetas, OXXO, transferencias o tu monedero digital. Todo en un solo lugar.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌱</div>
+                <h3>Impacto Real</h3>
+                <p>Visualiza cuánto CO₂ has ahorrado y cuántos kg de comida has rescatado. Tu impacto importa.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Cerca de Ti</h3>
+                <p>Encuentra Deli-Boxes disponibles en comercios cercanos en tiempo real. Recoge y disfruta.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">❤️</div>
+                <h3>Economía Circular</h3>
+                <p>Participa en eventos como el Día del Ahorro y el Día Deli-Solidario para ayudar a tu comunidad.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="como-funciona" class="how-it-works">
+        <div class="how-container">
+            <h2>¿Cómo Funciona?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Descarga la App</h3>
+                    <p>Disponible gratis en iOS y Android. Regístrate en 30 segundos.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Busca Deli-Boxes</h3>
+                    <p>Explora comercios cercanos con packs disponibles. Filtra por distancia o tipo de comida.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Reserva y Paga</h3>
+                    <p>Selecciona tu Deli-Box y paga con Mercado Pago. Recibe confirmación al instante.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Recoge y Disfruta</h3>
+                    <p>Ve al comercio en el horario indicado, muestra tu código QR y recoge tu sorpresa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gamification Section -->
+    <section class="gamification">
+        <h2>Juega Mientras Ahorras</h2>
+        <p class="gamification-subtitle">Cada rescate te acerca a recompensas exclusivas</p>
+        <div class="game-features">
+            <div class="game-card">
+                <h3>🪙 DeliCoins</h3>
+                <p>Gana monedas virtuales en cada compra. Úsalas para descuentos adicionales o premios especiales.</p>
+            </div>
+            <div class="game-card">
+                <h3>🏆 Niveles Progresivos</h3>
+                <p>Comienza como Deli-Novato y avanza hasta Deli-Héroe. Desbloquea acceso anticipado a eventos.</p>
+            </div>
+            <div class="game-card">
+                <h3>🎖️ Badges Coleccionables</h3>
+                <p>Consigue insignias por retos completados: "Guardián del Planeta", "Maestro del Ahorro" y más.</p>
+            </div>
+            <div class="game-card">
+                <h3>📊 Tabla de Líderes</h3>
+                <p>Compite con otros usuarios en Chihuahua. Los top 10 cada mes reciben recompensas exclusivas.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="events">
+        <div class="events-container">
+            <h2>Eventos Especiales</h2>
+            <div class="events-grid">
+                <div class="event-card">
+                    <h3>💸 Día del Ahorro</h3>
+                    <p>Descuentos adicionales, retos colectivos y DeliCoins dobles. Una celebración mensual de la economía circular.</p>
+                </div>
+                <div class="event-card">
+                    <h3>🤝 Día Deli-Solidario</h3>
+                    <p>Compra un pack y otro va a alguien que lo necesita. Colaboramos con ONGs locales para repartir alimentos a comunidades vulnerables.</p>
+                </div>
+                <div class="event-card">
+                    <h3>🎯 Retos Semanales</h3>
+                    <p>Completa misiones como "Rescata 3 Deli-Boxes esta semana" y gana recompensas instantáneas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Business Section -->
+    <section id="comercios" class="for-business">
+        <h2>¿Tienes un Negocio de Comida?</h2>
+        <div class="business-content">
+            <div class="business-image">
+                <img src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/079ae214-0486-43b7-a769-f22d5bc09424" alt="Comercios DeliCrunch">
+            </div>
+            <div>
+                <h3>Convierte Excedentes en Ingresos</h3>
+                <p style="margin-bottom: 2rem; font-size: 1.125rem;">DeliCrunch te ayuda a monetizar productos que de otra forma se desperdiciarían. Sin costos fijos, solo pagas cuando vendes.</p>
+                <ul class="business-benefits">
+                    <li>Cero inversión inicial - solo comisión por venta</li>
+                    <li>Integración directa con Mercado Pago</li>
+                    <li>Dashboard gamificado con métricas de impacto</li>
+                    <li>Visibilidad ante miles de usuarios eco-conscientes</li>
+                    <li>Participa en eventos solidarios y gana reputación</li>
+                </ul>
+                <a href="#contacto" class="btn btn-primary" style="margin-top: 2rem;">Unirse como Comercio</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impacto" class="impact">
+        <h2>Nuestro Impacto en Chihuahua</h2>
+        <p style="max-width: 600px; margin: 0 auto 3rem;">Cada Deli-Box rescatada contribuye a un planeta más sustentable y una economía más justa.</p>
+        <div class="impact-stats">
+            <div class="impact-stat">
+                <h3>120 TON</h3>
+                <p>CO₂ evitado</p>
+            </div>
+            <div class="impact-stat">
+                <h3>50,000</h3>
+                <p>Comidas rescatadas</p>
+            </div>
+            <div class="impact-stat">
+                <h3>2,500</h3>
+                <p>Familias beneficiadas</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="descargar" class="cta">
+        <h2>Descarga DeliCrunch Hoy</h2>
+        <p>Únete a la revolución contra el desperdicio alimentario en México</p>
+        <div class="app-badges">
+            <a href="#" class="app-badge">📱 App Store</a>
+            <a href="#" class="app-badge">🤖 Google Play</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h4>DeliCrunch</h4>
+                <p>La app mexicana que convierte desperdicio en ahorro.</p>
+                <p style="margin-top: 1rem;">Hecho con ❤️ en Chihuahua</p>
+            </div>
+            <div>
+                <h4>App</h4>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#como-funciona">Cómo Funciona</a></li>
+                    <li><a href="#comercios">Para Comercios</a></li>
+                    <li><a href="#impacto">Impacto</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Términos y Condiciones</a></li>
+                    <li><a href="#">Política de Privacidad</a></li>
+                    <li><a href="#">Aviso de Cookies</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="mailto:hola@delicrunch.mx">hola@delicrunch.mx</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">TikTok</a></li>
+                    <li><a href="#">Facebook</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DeliCrunch. Todos los derechos reservados. | RESCATA - AHORRA - AYUDA</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Mobile menu toggle (basic implementation)
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'var(--white)';
+                navLinks.style.padding = '2rem';
+                navLinks.style.borderTop = '4px solid var(--black)';
+            }
+        });
+
+        // Update stats on scroll (optional animation)
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .step, .game-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
